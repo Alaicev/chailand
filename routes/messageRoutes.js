@@ -1,5 +1,5 @@
 const express = require('express');
-const messageController = require('../controllers/MessageController');
+const messageController = require('../controllers/messageController');
 const { authenticateToken, requireAdmin } = require('../middleware/authMiddleware');
 
 
