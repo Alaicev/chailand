@@ -1,1 +1,1 @@
-export const currentURL = 'http://chailandsaratov.ru/'
+export const currentURL = 'http://chailandsaratov.ru'
