@@ -8,6 +8,7 @@ const prizeRoutes = require('./routes/prizeRoutes');
 const packetRoutes = require('./routes/packetRoutes');
 const routerGalerey = require('./routes/galleryRoutes');
 const messageRouter = require('./routes/messageRoutes');
+const seedAdmin = require('./utils/seedAdmin');
 
 dotenv.config();
 
@@ -82,7 +83,12 @@ app.get('*', (req, res) => {
 //     message: `Route ${req.originalUrl} does not exist`
 //   });
 // });
+const startServer = async () => {
+  await seedAdmin();
 
-app.listen(PORT, () => {
-console.log(`Server started on http://localhost:${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+};
+
+startServer();

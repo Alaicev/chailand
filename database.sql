@@ -48,7 +48,7 @@ CREATE TABLE messages (
 {
     "name": "Новый пользователь",
     "email": "admin@example.com",
-    "password": "password123"
+    "password": "qwerty123"
 }
 
 UPDATE users SET role = 'admin' WHERE email = 'admin@example.com'; 
