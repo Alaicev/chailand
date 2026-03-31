@@ -14,7 +14,7 @@ const seedAdmin = async () => {
 
     console.log('No users found. Creating admin...');
 
-    const hashedPassword = await bcrypt.hash('qwerty123', 10);
+    const hashedPassword = await bcrypt.hash('password123', 10);
 
     await pool.query(
       `INSERT INTO users (name, email, password, role) 
