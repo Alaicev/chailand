@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { messageAPI } from '../../services/api';
+import { currentURL } from '../../../../url/url';
 
 const CENTERS = {
   HAPPY_MALL: 'ТРЦ Happy Молл',
@@ -147,7 +148,7 @@ const exportSelectedAsRead = async () => {
       const token = localStorage.getItem('token');
       
       // 1. Получаем файл напрямую через fetch с авторизацией
-      const response = await fetch('http://localhost:5070/api/messages/exel', {
+      const response = await fetch(`${currentURL}/api/messages/exel`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

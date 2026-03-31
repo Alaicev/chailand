@@ -1,0 +1,1 @@
+export const currentURL = 'http://chailandsaratov.ru/'

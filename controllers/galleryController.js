@@ -1,4 +1,5 @@
 const pool = require('../config/database.js');
+import { currentURL } from './../url/url';
 const path = require('path');
 const fs = require('fs');
 
@@ -42,7 +43,7 @@ class GalleryController {
         message: 'Image uploaded to gallery successfully',
         image: {
           ...result.rows[0],
-          fullUrl: `http://localhost:5070${fileUrl}`
+          fullUrl: `${currentURL}${fileUrl}`
         }
       });
     } catch (error) {
@@ -73,7 +74,7 @@ class GalleryController {
       // Добавляем полный URL к каждому изображению
       const images = result.rows.map(image => ({
         ...image,
-        fullUrl: `http://localhost:5070${image.url}`
+        fullUrl: `${currentURL}${image.url}`
       }));
       
       res.json({ 
@@ -136,7 +137,7 @@ class GalleryController {
       }
 
       const image = result.rows[0];
-      image.fullUrl = `http://localhost:5070${image.url}`;
+      image.fullUrl = `${currentURL}${image.url}`;
 
       res.json({
         success: true,
@@ -230,7 +231,7 @@ class GalleryController {
       }
       
       const updatedImage = result.rows[0];
-      updatedImage.fullUrl = `http://localhost:5070${updatedImage.url}`;
+      updatedImage.fullUrl = `${currentURL}${updatedImage.url}`;
       
       res.json({
         success: true,
@@ -279,7 +280,7 @@ class GalleryController {
 
       const images = result.rows.map(image => ({
         ...image,
-        fullUrl: `http://localhost:5070${image.url}`
+        fullUrl: `${currentURL}${image.url}`
       }));
 
       res.json({
