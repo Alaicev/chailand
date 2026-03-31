@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Стили для форм */
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Убираем стандартные стили кнопок */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Убираем стандартные стили списков */
+ul, ol {
+  list-style: none;
+}
+
+/* Убираем подчеркивание ссылок */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
