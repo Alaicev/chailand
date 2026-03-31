@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { currentURL } from '../../../url/url';
+import { currentURL } from '../url/url';
 
 const API_URL = `${currentURL}/api`;
 

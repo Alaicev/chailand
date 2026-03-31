@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { messageAPI } from '../../services/api';
-import { currentURL } from '../../../../url/url';
+import { currentURL } from '../../url/url';
 
 const CENTERS = {
   HAPPY_MALL: 'ТРЦ Happy Молл',

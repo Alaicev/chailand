@@ -1,7 +1,7 @@
 const pool = require('../config/database.js');
-import { currentURL } from './../url/url';
 const path = require('path');
 const fs = require('fs');
+const { currentURL } = require('../admin/src/url/url.js');
 
 // Константы для центров
 const CENTERS = {
