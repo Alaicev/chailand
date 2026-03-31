@@ -16,11 +16,8 @@ const app = express();
 const PORT = process.env.PORT || 5070;
 app.use(express.json());
 
-app.use(cors({
-  origin: "*",
-
-}));
-
+app.use(cors({ origin: "*" }));
+app.options('*', cors()); // явно разрешаем preflight
 // 1. Middleware
 
 // 2. API (САМЫЕ ПЕРВЫЕ)

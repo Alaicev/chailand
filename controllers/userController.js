@@ -48,7 +48,7 @@ class UserController {
 
   async login(req, res) {
     const { email, password } = req.body;
-
+    console.log('Login request body:', req.body);
     try {
       const result = await pool.query(
         'SELECT * FROM users WHERE email = $1',
