@@ -52,3 +52,5 @@ CREATE TABLE messages (
 }
 
 UPDATE users SET role = 'admin' WHERE email = 'admin@example.com'; 
+
+ALTER TABLE pacets ADD COLUMN extra TEXT DEFAULT '';

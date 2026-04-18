@@ -11,25 +11,24 @@ const PacketForm = () => {
     name: '',
     points: [''],
     prices: [''],
+    extras: [''],
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isEditMode) {
-      fetchPacket();
-    }
+    if (isEditMode) fetchPacket();
   }, [id]);
 
   const fetchPacket = async () => {
     try {
       const response = await packetAPI.getById(id);
       const packet = response.data.packet;
-      
       setFormData({
         name: packet.name || '',
         points: packet.points?.map(p => p.text) || [''],
         prices: packet.prices?.map(p => p.value) || [''],
+        extras: packet.extras?.map(e => e.text) || [''],
       });
     } catch (error) {
       console.error('Error fetching packet:', error);
@@ -39,36 +38,19 @@ const PacketForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   // Обработчики для points
   const handlePointChange = (index, value) => {
     const newPoints = [...formData.points];
     newPoints[index] = value;
-    setFormData(prev => ({
-      ...prev,
-      points: newPoints,
-    }));
+    setFormData(prev => ({ ...prev, points: newPoints }));
   };
-
-  const addPoint = () => {
-    setFormData(prev => ({
-      ...prev,
-      points: [...prev.points, ''],
-    }));
-  };
-
+  const addPoint = () => setFormData(prev => ({ ...prev, points: [...prev.points, ''] }));
   const removePoint = (index) => {
     if (formData.points.length > 1) {
-      const newPoints = formData.points.filter((_, i) => i !== index);
-      setFormData(prev => ({
-        ...prev,
-        points: newPoints,
-      }));
+      setFormData(prev => ({ ...prev, points: prev.points.filter((_, i) => i !== index) }));
     }
   };
 
@@ -76,26 +58,25 @@ const PacketForm = () => {
   const handlePriceChange = (index, value) => {
     const newPrices = [...formData.prices];
     newPrices[index] = value;
-    setFormData(prev => ({
-      ...prev,
-      prices: newPrices,
-    }));
+    setFormData(prev => ({ ...prev, prices: newPrices }));
   };
-
-  const addPrice = () => {
-    setFormData(prev => ({
-      ...prev,
-      prices: [...prev.prices, ''],
-    }));
-  };
-
+  const addPrice = () => setFormData(prev => ({ ...prev, prices: [...prev.prices, ''] }));
   const removePrice = (index) => {
     if (formData.prices.length > 1) {
-      const newPrices = formData.prices.filter((_, i) => i !== index);
-      setFormData(prev => ({
-        ...prev,
-        prices: newPrices,
-      }));
+      setFormData(prev => ({ ...prev, prices: prev.prices.filter((_, i) => i !== index) }));
+    }
+  };
+
+  // Обработчики для extras (дополнительно)
+  const handleExtraChange = (index, value) => {
+    const newExtras = [...formData.extras];
+    newExtras[index] = value;
+    setFormData(prev => ({ ...prev, extras: newExtras }));
+  };
+  const addExtra = () => setFormData(prev => ({ ...prev, extras: [...prev.extras, ''] }));
+  const removeExtra = (index) => {
+    if (formData.extras.length > 1) {
+      setFormData(prev => ({ ...prev, extras: prev.extras.filter((_, i) => i !== index) }));
     }
   };
 
@@ -104,20 +85,21 @@ const PacketForm = () => {
     setLoading(true);
     setError('');
 
-    // Фильтруем пустые значения
-    const filteredPoints = formData.points.filter(point => point.trim() !== '');
-    const filteredPrices = formData.prices.filter(price => price.trim() !== '');
+    const filteredPoints = formData.points.filter(p => p.trim() !== '');
+    const filteredPrices = formData.prices.filter(p => p.trim() !== '');
+    const filteredExtras = formData.extras.filter(e => e.trim() !== '');
 
     const packetData = {
       name: formData.name.trim(),
       points: filteredPoints,
       prices: filteredPrices,
+      extras: filteredExtras,
     };
 
     try {
       if (isEditMode) {
         await packetAPI.update(id, packetData);
-        alert('Пакет обновлен!');
+        alert('Пакет обновлён!');
       } else {
         await packetAPI.create(packetData);
         alert('Пакет создан!');
@@ -133,13 +115,7 @@ const PacketForm = () => {
   return (
     <div style={styles.container}>
       <h2>{isEditMode ? 'Редактировать пакет' : 'Создать новый пакет'}</h2>
-      
-      {error && (
-        <div style={styles.error}>
-          {error}
-        </div>
-      )}
-
+      {error && <div style={styles.error}>{error}</div>}
       <form onSubmit={handleSubmit} style={styles.form}>
         {/* Название пакета */}
         <div style={styles.formGroup}>
@@ -158,10 +134,7 @@ const PacketForm = () => {
         {/* Элементы пакета (points) */}
         <div style={styles.formGroup}>
           <label style={styles.label}>Элементы пакета</label>
-          <div style={styles.sectionDescription}>
-            Что входит в пакет (функции, возможности и т.д.)
-          </div>
-          
+          <div style={styles.sectionDescription}>Что входит в пакет (функции, возможности и т.д.)</div>
           {formData.points.map((point, index) => (
             <div key={`point-${index}`} style={styles.row}>
               <input
@@ -182,23 +155,13 @@ const PacketForm = () => {
               </button>
             </div>
           ))}
-          
-          <button
-            type="button"
-            onClick={addPoint}
-            style={styles.addButton}
-          >
-            + Добавить элемент
-          </button>
+          <button type="button" onClick={addPoint} style={styles.addButton}>+ Добавить элемент</button>
         </div>
 
         {/* Цены (prices) */}
         <div style={styles.formGroup}>
           <label style={styles.label}>Цены</label>
-          <div style={styles.sectionDescription}>
-            Варианты цен (например: "3000₽/мес", "Бесплатно", "30000₽" и т.д.)
-          </div>
-          
+          <div style={styles.sectionDescription}>Варианты цен (например: "3000₽/мес", "Бесплатно", "30000₽")</div>
           {formData.prices.map((price, index) => (
             <div key={`price-${index}`} style={styles.row}>
               <input
@@ -219,35 +182,42 @@ const PacketForm = () => {
               </button>
             </div>
           ))}
-          
-          <button
-            type="button"
-            onClick={addPrice}
-            style={styles.addButton}
-          >
-            + Добавить цену
-          </button>
+          <button type="button" onClick={addPrice} style={styles.addButton}>+ Добавить цену</button>
+        </div>
+
+        {/* Дополнительно (extras) */}
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Дополнительно</label>
+          <div style={styles.sectionDescription}>Дополнительные заметки, условия или опции</div>
+          {formData.extras.map((extra, index) => (
+            <div key={`extra-${index}`} style={styles.row}>
+              <input
+                type="text"
+                value={extra}
+                onChange={(e) => handleExtraChange(index, e.target.value)}
+                style={styles.input}
+                placeholder={`Доп. поле ${index + 1}`}
+              />
+              <button
+                type="button"
+                onClick={() => removeExtra(index)}
+                style={styles.removeButton}
+                disabled={formData.extras.length === 1}
+                title="Удалить поле"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button type="button" onClick={addExtra} style={styles.addButton}>+ Добавить дополнительно</button>
         </div>
 
         {/* Кнопки */}
         <div style={styles.buttonGroup}>
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              ...styles.submitButton,
-              ...(loading ? styles.disabledButton : {})
-            }}
-          >
+          <button type="submit" disabled={loading} style={{...styles.submitButton, ...(loading ? styles.disabledButton : {})}}>
             {loading ? 'Сохранение...' : (isEditMode ? 'Обновить' : 'Создать')}
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/packets')}
-            style={styles.cancelButton}
-          >
-            Отмена
-          </button>
+          <button type="button" onClick={() => navigate('/packets')} style={styles.cancelButton}>Отмена</button>
         </div>
       </form>
     </div>
@@ -255,133 +225,20 @@ const PacketForm = () => {
 };
 
 const styles = {
-  container: {
-    maxWidth: '700px',
-    margin: '0 auto',
-    padding: '20px',
-  },
-  form: {
-    backgroundColor: 'white',
-    padding: '30px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  formGroup: {
-    marginBottom: '30px',
-    padding: '20px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '6px',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '8px',
-    fontWeight: '600',
-    color: '#34495e',
-    fontSize: '16px',
-  },
-  sectionDescription: {
-    fontSize: '13px',
-    color: '#7f8c8d',
-    marginBottom: '15px',
-    fontStyle: 'italic',
-  },
-  input: {
-    width: '100%',
-    padding: '12px',
-    border: '2px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '15px',
-    transition: 'border-color 0.3s',
-    ':focus': {
-      borderColor: '#3498db',
-      outline: 'none',
-    },
-  },
-  row: {
-    display: 'flex',
-    gap: '10px',
-    marginBottom: '10px',
-    alignItems: 'center',
-  },
-  removeButton: {
-    padding: '12px 15px',
-    backgroundColor: '#e74c3c',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    minWidth: '45px',
-    ':hover': {
-      backgroundColor: '#c0392b',
-    },
-    ':disabled': {
-      backgroundColor: '#bdc3c7',
-      cursor: 'not-allowed',
-    },
-  },
-  addButton: {
-    padding: '10px 20px',
-    backgroundColor: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    marginTop: '10px',
-    ':hover': {
-      backgroundColor: '#2980b9',
-    },
-  },
-  buttonGroup: {
-    display: 'flex',
-    gap: '15px',
-    marginTop: '20px',
-  },
-  submitButton: {
-    flex: 2,
-    padding: '15px',
-    backgroundColor: '#2ecc71',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-    ':hover': {
-      backgroundColor: '#27ae60',
-    },
-  },
-  cancelButton: {
-    flex: 1,
-    padding: '15px',
-    backgroundColor: '#95a5a6',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-    ':hover': {
-      backgroundColor: '#7f8c8d',
-    },
-  },
-  disabledButton: {
-    backgroundColor: '#bdc3c7',
-    cursor: 'not-allowed',
-    ':hover': {
-      backgroundColor: '#bdc3c7',
-    },
-  },
-  error: {
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
-    padding: '15px',
-    borderRadius: '6px',
-    marginBottom: '20px',
-    border: '1px solid #f5c6cb',
-  },
+  container: { maxWidth: '700px', margin: '0 auto', padding: '20px' },
+  form: { backgroundColor: 'white', padding: '30px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' },
+  formGroup: { marginBottom: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '6px' },
+  label: { display: 'block', marginBottom: '8px', fontWeight: '600', color: '#34495e', fontSize: '16px' },
+  sectionDescription: { fontSize: '13px', color: '#7f8c8d', marginBottom: '15px', fontStyle: 'italic' },
+  input: { width: '100%', padding: '12px', border: '2px solid #ddd', borderRadius: '6px', fontSize: '15px' },
+  row: { display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' },
+  removeButton: { padding: '12px 15px', backgroundColor: '#e74c3c', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '16px', minWidth: '45px' },
+  addButton: { padding: '10px 20px', backgroundColor: '#3498db', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', marginTop: '10px' },
+  buttonGroup: { display: 'flex', gap: '15px', marginTop: '20px' },
+  submitButton: { flex: 2, padding: '15px', backgroundColor: '#2ecc71', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' },
+  cancelButton: { flex: 1, padding: '15px', backgroundColor: '#95a5a6', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', cursor: 'pointer' },
+  disabledButton: { backgroundColor: '#bdc3c7', cursor: 'not-allowed' },
+  error: { backgroundColor: '#f8d7da', color: '#721c24', padding: '15px', borderRadius: '6px', marginBottom: '20px', border: '1px solid #f5c6cb' }
 };
 
 export default PacketForm;

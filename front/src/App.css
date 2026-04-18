@@ -810,6 +810,7 @@ select option {
 
 .packet-point {
   font-size: 1.2vw;
+  text-align: center;
 }
 
 .button-con { 
@@ -942,7 +943,9 @@ padding-top: 2vw;
   gap: 1vw;
 }
 
-.pac-lock3 p:first-child {
+.pac-lock3 p:first-child, 
+.pac-lock1 p:first-child,
+.pac-lock2 p:first-child{
   font-weight: bold;
 }
 
@@ -1192,6 +1195,17 @@ padding-top: 2vw;
     display: none;
   }
 
+  .allBlocksPac {
+display: flex;
+flex-direction: column;
+gap: 10vw;
+}
+
+.dops-item-fl {
+  flex-direction: column;
+  gap: 5vw;
+}
+
   .header {
     justify-content: center
   }
@@ -1364,6 +1378,7 @@ label {
 }
 
 .prices-sub-sub-text {
+  margin-top: 5vw;
     font-size: 3vw;
     text-align: center;
 }
