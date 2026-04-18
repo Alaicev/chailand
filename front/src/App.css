@@ -704,6 +704,7 @@ select option {
 
 .prise-poites2 { 
   display: flex;
+  gap: 5vw;
   justify-content: space-between;
   width: 100%;
   padding: 0 5vw;
@@ -1199,6 +1200,11 @@ padding-top: 2vw;
 display: flex;
 flex-direction: column;
 gap: 10vw;
+}
+
+.prise-poites2 { 
+  display: flex;
+flex-direction: column;
 }
 
 .dops-item-fl {
