@@ -45,7 +45,7 @@ class GalleryController {
         message: 'Image uploaded to gallery successfully',
         image: {
           ...result.rows[0],
-          fullUrl: `${currentURL}/${fileUrl}`
+          fullUrl: `${currentURL}${fileUrl}`
         }
       });
     } catch (error) {
@@ -76,7 +76,7 @@ class GalleryController {
       // Добавляем полный URL к каждому изображению
       const images = result.rows.map(image => ({
         ...image,
-        fullUrl: `${currentURL}/${image.url}`
+        fullUrl: `${currentURL}${image.url}`
       }));
       
       res.json({ 
@@ -139,7 +139,7 @@ class GalleryController {
       }
 
       const image = result.rows[0];
-      image.fullUrl = `${currentURL}/${image.url}`;
+      image.fullUrl = `${currentURL}${image.url}`;
 
       res.json({
         success: true,
@@ -233,7 +233,7 @@ class GalleryController {
       }
       
       const updatedImage = result.rows[0];
-      updatedImage.fullUrl = `${currentURL}/${updatedImage.url}`;
+      updatedImage.fullUrl = `${currentURL}${updatedImage.url}`;
       
       res.json({
         success: true,
@@ -282,7 +282,7 @@ class GalleryController {
 
       const images = result.rows.map(image => ({
         ...image,
-        fullUrl: `${currentURL}/${image.url}`
+        fullUrl: `${currentURL}${image.url}`
       }));
 
       res.json({
