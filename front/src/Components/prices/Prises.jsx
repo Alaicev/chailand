@@ -64,7 +64,8 @@ function Prises(props) {
         </div>
         <p className="prices-sub-text">Праздничные пакетные предложения</p>
         <div className="prices-items">
-          {packets.map((a, i) => (
+          {
+          packets.slice(0, 3).map((a, i) => (
             <PacketsList key={i} title={a.name} points={a.points} prices={a.prices}/>
           ))}
         </div> 
