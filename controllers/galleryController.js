@@ -1,8 +1,10 @@
 const pool = require('../config/database.js');
 const path = require('path');
 const fs = require('fs');
-const { currentURL } = require('../url/url.js');
+// const { currentURL } = require('../url/url.js');
 
+
+const currentURL = 'https://chailandsaratov.ru'
 // Константы для центров
 const CENTERS = {
   HAPPY_MALL: 'ТРЦ Happy Молл',
